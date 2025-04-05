@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -15,8 +16,8 @@ public class Post {
     private String postCategory;
     private List<String> postTags;
     @Builder.Default
-    private String status = "ACTIVE";
-    private LocalDateTime postCreatedAt;
-    private LocalDateTime postUpdatedAt;
+    private String postStatus = "ACTIVE";
+    private Date postCreatedAt;
+    private Date postUpdatedAt;
 
 }

@@ -3,8 +3,10 @@ package com.example.bloggingPlatform.repository.query;
 public class PostQuery {
 
     public static final String INSERT_POST = """
-            INSERT INTO Post (postTitle, postContent, postCategory, postCreatedAt, postUpdatedAt)
+            INSERT INTO Post (postTitle, postContent, postCategory, postStatus, postCreatedAt, postUpdatedAt)
+            VALUES (:postTitle, :postContent, :postCategory, :postStatus, :postCreatedAt, :postUpdatedAt)
             """;
+
 
     public static final String INSERT_POST_TAG = """
             INSERT INTO PostTag (postId, postTag)
