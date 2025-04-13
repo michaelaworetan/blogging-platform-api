@@ -5,8 +5,8 @@ import lombok.Data;
 
 @Data
 @Builder
-public class postPageRequest {
+public class PostPageRequest {
     private int postPage;
     private int postSize;
-    private String postSearchTerm;
+    private String term;
 }

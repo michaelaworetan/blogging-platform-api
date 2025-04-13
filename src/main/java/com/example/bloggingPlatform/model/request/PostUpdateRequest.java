@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 
 import java.util.List;
 
-public class postUpdateRequest {
+public class PostUpdateRequest {
     @NotBlank(message = "Post title is required")
     private String postTitle;
     @NotBlank(message = "Post content is required")

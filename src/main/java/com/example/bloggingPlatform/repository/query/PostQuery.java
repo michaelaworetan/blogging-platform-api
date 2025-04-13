@@ -13,8 +13,18 @@ public class PostQuery {
             VALUES (:postId, :postTag)
             """;
 
+//    public static final String GET_ALL_POSTS = """
+//            SELECT p.*, dbo.ConcatenateTagsForPost(p.postId) as tags
+//            FROM Post p
+//            WHERE p.postStatus = 'ACTIVE'
+//            ORDER BY p.postCreatedAt DESC
+//            OFFSET :offset ROWS
+//            FETCH NEXT :limit ROWS ONLY
+//            """;
+
     public static final String GET_ALL_POSTS = """
-            SELECT p.*, dbo.ConcatenateTagsForPost(p.id) as tags
+            SELECT p.postId, p.postTitle, p.postContent, p.postCategory, p.postStatus, p.postCreatedAt, p.postUpdatedAt,
+                (SELECT STRING_AGG(pt.postTag, ',') FROM PostTag pt WHERE pt.postId = p.postId) as postTags
             FROM Post p
             WHERE p.postStatus = 'ACTIVE'
             ORDER BY p.postCreatedAt DESC
@@ -23,7 +33,7 @@ public class PostQuery {
             """;
 
     public static final String GET_POST_BY_ID = """
-            SELECT p.*, dbo.ConcatenateTagsForPost(p.postId) as tags
+            SELECT p.*, dbo.ConcatenateTagsForPost(p.postId) as posTags
             FROM Post p
             WHERE p.postId = :postId AND p.postStatus = 'ACTIVE'
             """;
@@ -45,8 +55,19 @@ public class PostQuery {
             WHERE postId = :postId
             """;
 
+//    public static final String SEARCH_POSTS = """
+//            SELECT p.*, dbo.ConcatenateTagsForPost(p.postId) as tags
+//            FROM Post p
+//            WHERE p.postStatus = 'ACTIVE'
+//            AND (p.postTitle LIKE :term OR p.postContent LIKE :term OR p.postCategory LIKE :term)
+//            ORDER BY p.postCreatedAt DESC
+//            OFFSET :offset ROWS
+//            FETCH NEXT :limit ROWS ONLY
+//            """;
+
     public static final String SEARCH_POSTS = """
-            SELECT p.*, dbo.ConcatenateTagsForPost(p.postId) as tags
+            SELECT p.*,
+                (SELECT STRING_AGG(pt.postTag, ',') FROM PostTag pt WHERE pt.postId = p.postId) as postTags
             FROM Post p
             WHERE p.postStatus = 'ACTIVE'
             AND (p.postTitle LIKE :term OR p.postContent LIKE :term OR p.postCategory LIKE :term)

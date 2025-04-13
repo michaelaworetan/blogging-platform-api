@@ -14,7 +14,7 @@ public class PostRowMapper implements RowMapper<Post> {
 
     @Override
     public Post mapRow(ResultSet rs, int rowNum) throws SQLException {
-        List<String> postTags = null;
+        List<String> postTags;
         String tagsString = rs.getString("postTags");
 
         if (tagsString != null && !tagsString.isEmpty()) {
@@ -30,7 +30,7 @@ public class PostRowMapper implements RowMapper<Post> {
                 .postContent(rs.getString("postContent"))
                 .postCategory(rs.getString("postCategory"))
                 .postTags(postTags)
-                .postStatus(rs.getString("status"))
+                .postStatus(rs.getString("postStatus"))
                 .postCreatedAt(rs.getTimestamp("postCreatedAt"))
                 .postUpdatedAt(rs.getTimestamp("postCreatedAt"))
                 .build();

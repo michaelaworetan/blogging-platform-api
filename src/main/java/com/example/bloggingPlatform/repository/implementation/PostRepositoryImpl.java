@@ -1,5 +1,6 @@
 package com.example.bloggingPlatform.repository.implementation;
 
+import com.example.bloggingPlatform.mapper.PostRowMapper;
 import com.example.bloggingPlatform.model.entity.Post;
 import com.example.bloggingPlatform.repository.Interface.PostRepository;
 import com.example.bloggingPlatform.repository.query.PostQuery;
@@ -51,7 +52,11 @@ public class PostRepositoryImpl implements PostRepository {
 
     @Override
     public List<Post> getAllPosts(int page, int size) {
-        return List.of();
+        int offset = page * size;
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("offset", offset)
+                .addValue("limit", size);
+        return jdbcTemplate.query(PostQuery.GET_ALL_POSTS, params, new PostRowMapper());
     }
 
     @Override
@@ -70,8 +75,13 @@ public class PostRepositoryImpl implements PostRepository {
     }
 
     @Override
-    public List<Post> searchPosts(String searchTerm, int page, int size) {
-        return List.of();
+    public List<Post> searchPosts(String term, int page, int size) {
+        int offset = page * size;
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("term", "%" + term + "%")
+                .addValue("offset", offset)
+                .addValue("limit", size);
+        return jdbcTemplate.query(PostQuery.SEARCH_POSTS, params, new PostRowMapper());
     }
 
     @Override
@@ -80,7 +90,9 @@ public class PostRepositoryImpl implements PostRepository {
     }
 
     @Override
-    public Long countSearchPosts(String searchTerm) {
-        return 0L;
+    public Long countSearchPosts(String term) {
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("term", "%" + term + "%");
+        return jdbcTemplate.queryForObject(PostQuery.COUNT_SEARCH_POSTS, params, Long.class);
     }
 }
