@@ -42,5 +42,17 @@ public class PostController {
 
     }
 
+    @GetMapping("/{postId}")
+    public ResponseEntity<PostResponse> getPostById(
+            @PathVariable Long postId
+    ) {
+        PostResponse response = postService.getPostById(postId);
+
+        if (response.getPost() != null) {
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
+    }
 
 }

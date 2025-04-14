@@ -33,11 +33,11 @@ public class PostQuery {
             """;
 
     public static final String GET_POST_BY_ID = """
-            SELECT p.*, dbo.ConcatenateTagsForPost(p.postId) as posTags
+            SELECT p.postId, p.postTitle, p.postContent, p.postCategory, p.postStatus, p.postCreatedAt, p.postUpdatedAt,
+                (SELECT STRING_AGG(pt.postTag, ',') FROM PostTag pt WHERE pt.postId = p.postId) as postTags
             FROM Post p
             WHERE p.postId = :postId AND p.postStatus = 'ACTIVE'
             """;
-
     public static final String UPDATE_POST = """
             UPDATE Post
             SET postTitle = :postTitle, postContent = :postContent, postCategory = :postCategory, postUpdatedAt = :postUpdatedAt

@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PostService {
@@ -77,5 +78,23 @@ public class PostService {
                 .totalPages(totalPages)
                 .totalElements(totalPosts)
                 .build();
+    }
+
+    public PostResponse getPostById(Long postId) {
+        Optional<Post> post = postRepository.getPostById(postId);
+
+        if (post.isPresent()) {
+            return PostResponse.builder()
+                    .responseCode(ResponseConstants.SUCCESS.getResponseCode())
+                    .responseMessage(ResponseConstants.SUCCESS.getResponseMessage())
+                    .post(post.get())
+                    .build();
+        } else {
+            return PostResponse.builder()
+                    .responseCode(ResponseConstants.NOT_FOUND.getResponseCode())
+                    .responseMessage(ResponseConstants.NOT_FOUND.getResponseMessage())
+                    .build();
+        }
+
     }
 }

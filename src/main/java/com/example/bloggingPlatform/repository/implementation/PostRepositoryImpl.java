@@ -4,6 +4,7 @@ import com.example.bloggingPlatform.mapper.PostRowMapper;
 import com.example.bloggingPlatform.model.entity.Post;
 import com.example.bloggingPlatform.repository.Interface.PostRepository;
 import com.example.bloggingPlatform.repository.query.PostQuery;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -47,7 +48,6 @@ public class PostRepositoryImpl implements PostRepository {
                 jdbcTemplate.update(PostQuery.INSERT_POST_TAG, params);
             }
         }
-
     }
 
     @Override
@@ -61,7 +61,13 @@ public class PostRepositoryImpl implements PostRepository {
 
     @Override
     public Optional<Post> getPostById(Long postId) {
-        return Optional.empty();
+        try {
+            MapSqlParameterSource params = new MapSqlParameterSource("postId", postId);
+            Post post = jdbcTemplate.queryForObject(PostQuery.GET_POST_BY_ID, params, new PostRowMapper());
+            return Optional.ofNullable(post);
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
     }
 
     @Override
