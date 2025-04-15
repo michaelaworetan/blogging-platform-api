@@ -15,7 +15,7 @@ public interface PostRepository {
 
     Optional<Post> getPostById(Long postId);
 
-    int updatePost(Long postId, Post post);
+    Long updatePost(Long postId, Post post);
 
     int deletePostById(Long postId);
 
@@ -24,5 +24,7 @@ public interface PostRepository {
     Long countPosts();
 
     Long countSearchPosts(String searchTerm);
+
+    void updatePostTags(Long postId, List<String> postTags);
 
 }

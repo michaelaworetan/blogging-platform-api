@@ -71,8 +71,15 @@ public class PostRepositoryImpl implements PostRepository {
     }
 
     @Override
-    public int updatePost(Long postId, Post post) {
-        return 0;
+    public Long updatePost(Long postId, Post post) {
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("postId", postId)
+                .addValue("postTitle", post.getPostTitle())
+                .addValue("postContent", post.getPostContent())
+                .addValue("postCategory", post.getPostCategory())
+                .addValue("postUpdatedAt", post.getPostUpdatedAt());
+
+        return (long) jdbcTemplate.update(PostQuery.UPDATE_POST, params);
     }
 
     @Override
@@ -101,4 +108,13 @@ public class PostRepositoryImpl implements PostRepository {
                 .addValue("term", "%" + term + "%");
         return jdbcTemplate.queryForObject(PostQuery.COUNT_SEARCH_POSTS, params, Long.class);
     }
+
+    @Override
+    public void updatePostTags(Long postId, List<String> postTags) {
+        MapSqlParameterSource deleteParams = new MapSqlParameterSource("postId", postId);
+        jdbcTemplate.update(PostQuery.DELETE_POST_TAGS, deleteParams);
+
+        addPostTags(postId, postTags);
+    }
+
 }

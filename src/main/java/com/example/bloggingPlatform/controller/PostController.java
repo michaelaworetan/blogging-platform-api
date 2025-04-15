@@ -3,6 +3,7 @@ package com.example.bloggingPlatform.controller;
 import com.example.bloggingPlatform.Service.PostService;
 import com.example.bloggingPlatform.model.request.PostCreateRequest;
 import com.example.bloggingPlatform.model.request.PostPageRequest;
+import com.example.bloggingPlatform.model.request.PostUpdateRequest;
 import com.example.bloggingPlatform.model.response.PostListResponse;
 import com.example.bloggingPlatform.model.response.PostResponse;
 import jakarta.validation.Valid;
@@ -47,6 +48,19 @@ public class PostController {
             @PathVariable Long postId
     ) {
         PostResponse response = postService.getPostById(postId);
+
+        if (response.getPost() != null) {
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PutMapping("/{postId}")
+    public ResponseEntity<PostResponse> updatePost(
+            @PathVariable Long postId, @Valid @RequestBody PostUpdateRequest request
+    ) {
+        PostResponse response = postService.updatePost(postId, request);
 
         if (response.getPost() != null) {
             return new ResponseEntity<>(response, HttpStatus.OK);
