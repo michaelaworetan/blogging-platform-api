@@ -84,7 +84,10 @@ public class PostRepositoryImpl implements PostRepository {
 
     @Override
     public int deletePostById(Long postId) {
-        return 0;
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("postId", postId)
+                .addValue("postUpdatedAt", java.time.LocalDateTime.now());
+        return jdbcTemplate.update(PostQuery.DELETE_POST, params);
     }
 
     @Override
@@ -99,7 +102,7 @@ public class PostRepositoryImpl implements PostRepository {
 
     @Override
     public Long countPosts() {
-        return 0L;
+        return jdbcTemplate.queryForObject(PostQuery.COUNT_POSTS, new MapSqlParameterSource(), Long.class);
     }
 
     @Override

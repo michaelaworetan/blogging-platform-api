@@ -51,7 +51,7 @@ public class PostQuery {
 
     public static final String DELETE_POST = """
             UPDATE Post
-            SET postStatus = 'DELETED', postUpdatedAt = :updatedAt
+            SET postStatus = 'DELETED', postUpdatedAt = :postUpdatedAt
             WHERE postId = :postId
             """;
 

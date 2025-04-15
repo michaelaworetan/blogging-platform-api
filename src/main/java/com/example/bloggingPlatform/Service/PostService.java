@@ -4,12 +4,12 @@ import com.example.bloggingPlatform.model.entity.Post;
 import com.example.bloggingPlatform.model.request.PostCreateRequest;
 import com.example.bloggingPlatform.model.request.PostPageRequest;
 import com.example.bloggingPlatform.model.request.PostUpdateRequest;
+import com.example.bloggingPlatform.model.response.BaseResponse;
 import com.example.bloggingPlatform.model.response.PostListResponse;
 import com.example.bloggingPlatform.model.response.PostResponse;
 import com.example.bloggingPlatform.repository.implementation.PostRepositoryImpl;
 import com.example.bloggingPlatform.util.ResponseConstants;
 import com.google.gson.Gson;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -133,6 +133,23 @@ public class PostService {
                     .responseMessage(ResponseConstants.NOT_FOUND.getResponseMessage())
                     .build();
         }
-
     }
+
+        public BaseResponse deletePost(Long postId) {
+            Optional<Post> optionalPost = postRepository.getPostById(postId);
+    
+            if (optionalPost.isPresent()) {
+                postRepository.deletePostById(postId);
+    
+                return BaseResponse.builder()
+                        .responseCode(ResponseConstants.SUCCESS.getResponseCode())
+                        .responseMessage("Post deleted successfully")
+                        .build();
+            } else {
+                return BaseResponse.builder()
+                        .responseCode(ResponseConstants.NOT_FOUND.getResponseCode())
+                        .responseMessage(ResponseConstants.NOT_FOUND.getResponseMessage())
+                        .build();
+            }
+        }
 }

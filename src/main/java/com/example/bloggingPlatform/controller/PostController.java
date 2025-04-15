@@ -4,6 +4,7 @@ import com.example.bloggingPlatform.Service.PostService;
 import com.example.bloggingPlatform.model.request.PostCreateRequest;
 import com.example.bloggingPlatform.model.request.PostPageRequest;
 import com.example.bloggingPlatform.model.request.PostUpdateRequest;
+import com.example.bloggingPlatform.model.response.BaseResponse;
 import com.example.bloggingPlatform.model.response.PostListResponse;
 import com.example.bloggingPlatform.model.response.PostResponse;
 import jakarta.validation.Valid;
@@ -63,10 +64,22 @@ public class PostController {
         PostResponse response = postService.updatePost(postId, request);
 
         if (response.getPost() != null) {
+            response.setResponseMessage("Post updated successfully");
             return new ResponseEntity<>(response, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
     }
 
+    @DeleteMapping("/{postId}")
+    public ResponseEntity<BaseResponse> deletePost(@PathVariable Long postId) {
+        BaseResponse response = postService.deletePost(postId);
+
+        if (response.getResponseCode().equals("00")) {
+            response.setResponseMessage("Post deleted successfully");
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
+    }
 }
